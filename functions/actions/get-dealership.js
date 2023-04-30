@@ -73,12 +73,15 @@ function getAllRecords(cloudant,dbname, state) {
                  address: aRow["doc"]["address"],
                  zip: aRow["doc"]["zip"],
                  lat: aRow["doc"]["lat"],
-                 long: aRow["doc"]["long"]
+                 long: aRow["doc"]["long"],
+                 short_name: aRow["doc"]["short_name"],
+                 full_name: aRow["doc"]["full_name"]
              };
-             allRows.push(t);
+             //allRows.push(t);
+             allRows.push(aRow);
          }
      });
-     return {result: allRows};
+     return {rows: allRows};
      //return {result: result.result.rows};
  }
  
