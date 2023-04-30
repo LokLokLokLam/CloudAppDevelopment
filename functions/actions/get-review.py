@@ -33,7 +33,7 @@ def main(param_dict):
     
     filter_dealerId = ""
     if "dealerId" in param_dict:
-        filter_dealerId = param_dict["dealerId"]
+        filter_dealerId = int(param_dict["dealerId"])
     db_reviews = client['reviews']
     selector = {'dealership': {'$eq': filter_dealerId}}
     docs = db_reviews.get_query_result(selector)
@@ -51,4 +51,4 @@ def main(param_dict):
             a_doc["car_model"] = document["car_model"]
             a_doc["car_year"] = document["car_year"]
         t.append(a_doc)
-    return {"result": t}
+    return {"doc": t}
