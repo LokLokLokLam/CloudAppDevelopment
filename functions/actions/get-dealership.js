@@ -23,8 +23,11 @@ function main(params) {
 
     //let dbListPromise = getDbs(cloudant);
     //return dbListPromise;
-    
-    let allRecords = getAllRecords(cloudant, 'dealerships', params.state);
+    let allRecords = ''
+    if (typeof params.id === 'undefined')
+        allRecords = getAllRecords(cloudant, 'dealerships', params.state, "state");
+    else
+        allRecords = getAllRecords(cloudant, 'dealerships', parseInt(params.id), "id");
     return allRecords
 }
 
@@ -39,13 +42,13 @@ function getDbs(cloudant) {
                  reject({ err: err });
              });
      });
- }
- 
-function getAllRecords(cloudant,dbname, state) {
+}
+
+function getAllRecords(cloudant,dbname, filter, column) {
      return new Promise((resolve, reject) => {
          cloudant.postAllDocs({ db: dbname, includeDocs: true })            
              .then((result)=>{
-                 resolve(loopResult(result.result.rows, state))
+                 resolve(loopResult(result.result.rows, filter, column))
                 //resolve({result:result.result.rows[0]["doc"]});
                 //resolve({result:result.result.rows});
                 //resolve(result);
@@ -57,14 +60,14 @@ function getAllRecords(cloudant,dbname, state) {
          })
  }
  
- function loopResult(rows, state) {
+ function loopResult(rows, filter, column) {
      let returnAll = false;
-     if (typeof state === 'undefined')
+     if (typeof filter === 'undefined')
         returnAll = true;
      
      let allRows = []
      rows.forEach((aRow)=>{ 
-         if (returnAll || state === aRow["doc"]["state"])
+         if (returnAll || filter === aRow["doc"][column])
          {
              let t = {id: aRow["doc"]["id"],
                  city: aRow["doc"]["city"],
