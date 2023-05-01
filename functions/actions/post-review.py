@@ -15,12 +15,12 @@ def main(param_dict):
     Returns:
         _type_: _description_ TODO
     """
-    param_dict["COUCH_USERNAME"] = "57d360a5-45ae-43cb-a197-808795e4f84f-bluemix"
-    param_dict["IAM_API_KEY"] = "coUgxtDGP0Uy7_tCvtZMa2vWfDA5lYWPKtlgq-0W6Rzu"
+    COUCH_USERNAME = "57d360a5-45ae-43cb-a197-808795e4f84f-bluemix"
+    IAM_API_KEY = "coUgxtDGP0Uy7_tCvtZMa2vWfDA5lYWPKtlgq-0W6Rzu"
     try:
         client = Cloudant.iam(
-            account_name=param_dict["COUCH_USERNAME"],
-            api_key=param_dict["IAM_API_KEY"],
+            account_name=COUCH_USERNAME,
+            api_key=IAM_API_KEY,
             connect=True,
         )
         print(f"Databases: {client.all_dbs()}")
@@ -34,18 +34,18 @@ def main(param_dict):
     db_reviews = client['reviews']
     
     a_doc = {}
-    a_doc["id"] = param_dict["id"]
-    a_doc["name"] = param_dict["name"]
-    a_doc["dealership"] = param_dict["dealership"]
-    a_doc["review"] = param_dict["review"]
-    a_doc["purchase"] = param_dict["purchase"]
-    a_doc["another"] = param_dict["another"]
-    a_doc["purchase_date"] = param_dict["purchase_date"]
-    a_doc["car_make"] = param_dict["car_make"]
-    a_doc["car_model"] = param_dict["car_model"]
-    a_doc["car_year"] = param_dict["car_year"]
+    #a_doc["id"] = param_dict["id"]
+    #a_doc["name"] = param_dict["name"]
+    #a_doc["dealership"] = param_dict["dealership"]
+    #a_doc["review"] = param_dict["review"]
+    #a_doc["purchase"] = param_dict["purchase"]
+    #a_doc["another"] = param_dict["another"]
+    #a_doc["purchase_date"] = param_dict["purchase_date"]
+    #a_doc["car_make"] = param_dict["car_make"]
+    #a_doc["car_model"] = param_dict["car_model"]
+    #a_doc["car_year"] = param_dict["car_year"]
     
-    create_doc = db_reviews.create_document(a_doc)
-            
+    #create_doc = db_reviews.create_document(a_doc)
+    create_doc = db_reviews.create_document(param_dict["review"])
 
-    return {"result": create_doc.exists()}
+    return {"result": str(create_doc.exists())}
