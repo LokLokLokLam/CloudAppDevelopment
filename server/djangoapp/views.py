@@ -130,17 +130,27 @@ def add_review(request, dealer_id):
             return render(request, 'djangoapp/add_review.html', context)
 
         elif request.method == "POST":
+            print("***********Add Review: POST***********")
+            print(type(request))
+            print(request.POST['content'])
+            print(request.POST['purchasecheck'])
             review = {}
             review["time"] = datetime.utcnow().isoformat()
             review["dealership"] = dealer_id
-            review["review"] = "This is a great car dealer"
+            review["review"] = request.POST['content']
             review["id"] = 0
-            review["name"] = "this is name"
-            review["purchase"] = True
-            review["purchase_date"] = "06/08/2021"
-            review["car_make"] = "This is car make"
-            review["car_model"] = "This is car_model"
-            review["car_year"] = 2019
+            review["name"] = user.username
+            if request.POST['purchasecheck'] == "on":
+                review["purchase"] = True
+            else:
+                review["purchase"] = False
+            review["purchase_date"] = datetime.strptime(request.POST['purchasedate'],"%m/%d/%Y").strftime("%Y")
+            car_model = CarModel.objects.get(id = request.POST['car'])
+            review["car_make"] = car_model.carMake.name
+            review["car_model"] = car_model.name
+            review["car_year"] = car_model.year.strftime("%Y")
+
+            print(review)
 
             json_payload = {}
             json_payload['review'] = review
@@ -149,6 +159,6 @@ def add_review(request, dealer_id):
             result = post_request(url, json_payload, dealerId=dealer_id)
             print("***Post Review Result: ***")
             print(result)
-            return redirect("djangoapp:index")
+            return redirect("djangoapp:dealer_details", dealer_id=dealer_id)
     return redirect("djangoapp:index")
 
