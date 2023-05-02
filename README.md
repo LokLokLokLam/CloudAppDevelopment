@@ -34,3 +34,11 @@ You must complete all the labs to successfully complete the project.
 **Containerize your application**
 1. Add deployment artifacts to your application
 2. Deploy your application
+
+**Environment setup**
+If your Theia workspace has been reset and you want to continue from what you have done previously, you can git clone or pull the latest code from your GitHub repository.
+
+Set up the Python runtime if your Theia workspace has been reset. Run following command in server folder:
+1. python3 -m pip install -U -r requirements.txt
+
+Note that you may need to perform models migrations for a new Theia environment.
