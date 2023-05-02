@@ -1,0 +1,93 @@
+Estimated time needed: 60 mins
+
+You have made good progress in your assignment thus far! Your Django application is running on IBM Cloud, and your team is happy. However, your boss has a new ask. The company is looking at using containers to manage and deploy the application. Furthermore, the management is interested in using the hybrid cloud strategy where some applications and services reside on a private cloud and others on a public cloud. To provide a more robust development experience, you are asked to look at Kubernetes. So, let’s containerize your application now.
+
+NOTE: Before starting the lab, please click on “Click to expand!” and follow the steps to check and delete previously persisting sessions to avoid any issues while running the lab.
+
+Click to expand!
+Please run the below command:
+
+kubectl get deployments
+
+If you see that the dealership deployment already exists, please delete it using:
+
+kubectl delete deployment dealership
+
+Please run the below command:
+
+ibmcloud cr images
+
+If there is any dealership image, please delete it using:
+
+ibmcloud cr image-rm us.icr.io/<your sn labs namespace>/dealership:latest && docker rmi us.icr.io/<your sn labs namespace>/dealership:latest
+
+Please enter your SN labs namespace in place of <your sn labs namespace>
+
+If you do not remember your namesapce, you can get it by using either of the below commands:
+
+oc project
+ibmcloud cr namespaces (Please use the one which is of the format sn-labs-$USERNAME)
+Please sign out of SN labs & clear your browser cache and cookies.
+
+Please start the lab again & proceed as below.
+
+********************************************************************************************************************************************************************
+Add Dockerfile
+Create a Dockerfile in the root directory. The file will have the following steps listed:
+
+Add base image.
+Add requirements.txt file.
+Install and update Python.
+Change working directory.
+Expose port.
+Run command to start application.
+Here is an example file to get you started: (refer to Dockerfile)
+
+Notice that the the second to last command in Dockerfile refers to entrypoint.sh. This file should have the following content: (refer to entrypoint.sh)
+
+Please use the below command to make entrypoint.sh executable.
+
+
+chmod +x ./entrypoint.sh
+
+********************************************************************************************************************************************************************
+
+Push built image to container registry
+If you remember from the previous course in this certification, you were asked to build your image and push to IBM Cloud Image Registry (ICR). You need to do the same here and then refer to this image in your Kubernetes deployment file.
+
+Please export your SN labs namespace and print it on the console, as below:
+
+MY_NAMESPACE=$(ibmcloud cr namespaces | grep sn-labs-)
+echo $MY_NAMESPACE
+
+Perform a docker build with the Dockerfile in the current directory.
+
+docker build -t us.icr.io/$MY_NAMESPACE/dealership .
+
+Next, push the image to the container registry:
+
+docker push us.icr.io/$MY_NAMESPACE/dealership
+
+********************************************************************************************************************************************************************
+
+Add deployment artifacts
+Create deployment.yaml file to create the deployment and the service. It should look something like: (refer to deployment.yaml)
+
+********************************************************************************************************************************************************************
+
+Deploy the application
+Create the deployment using the following command and your deployment file:
+
+
+kubectl apply -f deployment.yaml
+
+Normally, we would add a service to our deployment, however, we are going to use port-forwarding in this environment to see the running application.
+
+
+kubectl port-forward deployment.apps/dealership 8000:8000
+
+Note: If you see any errors, please wait for some time & run the command again.
+
+Clicki on the Skills Network button on the right, it will open the “Skills Network Toolbox”. Then click OTHER then Launch Application. From there you should be able to enter the port as 8000 and launch, to see the running application.
+
+You will get an error from the home page. Add /djangoapp at the end of the URL to see your application.
